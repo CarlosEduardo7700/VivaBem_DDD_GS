@@ -42,9 +42,9 @@ public class DietaService implements IService<Dieta>{
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Requisição inválida! Reveja os dados da sua solicitação.").build();
         } else {
-            Dieta dietaCriada = repository.insertRepository(dieta).orElse(null);
+            Dieta novaDieta = repository.insertRepository(dieta).orElse(null);
 
-            return Response.status(Response.Status.CREATED).entity(dietaCriada).build();
+            return Response.status(Response.Status.CREATED).entity(novaDieta).build();
         }
     }
 

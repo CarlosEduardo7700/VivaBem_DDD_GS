@@ -25,8 +25,8 @@ public class BiotipoRepository implements IRepository<Biotipo> {
             while(rs.next()){
                 Biotipo biotipo = new Biotipo(
                         rs.getLong("ID_BIOTIPO"),
-                        rs.getString("NOME_BIOTIPO"),
-                        rs.getString("DESC_BIOTIPO")
+                        rs.getString("NM_BIOTIPO"),
+                        rs.getString("DS_BIOTIPO")
                 );
                 biotipos.add(biotipo);
             }
@@ -49,8 +49,8 @@ public class BiotipoRepository implements IRepository<Biotipo> {
                 if(rs.next()) {
                     Biotipo biotipo = new Biotipo(
                             rs.getLong("ID_BIOTIPO"),
-                            rs.getString("NOME_BIOTIPO"),
-                            rs.getString("DESC_BIOTIPO")
+                            rs.getString("NM_BIOTIPO"),
+                            rs.getString("DS_BIOTIPO")
                     );
                     return Optional.of(biotipo);
                 }
@@ -65,7 +65,7 @@ public class BiotipoRepository implements IRepository<Biotipo> {
 
     @Override
     public Optional<Biotipo> insertRepository(Biotipo biotipo) throws SQLException {
-        String queryInsert = "INSERT INTO T_VB_BIOTIPO (ID_BIOTIPO, NOME_BIOTIPO, DESC_BIOTIPO) VALUES (SQ_VB_BIOTIPO.nextval, ?, ?)";
+        String queryInsert = "INSERT INTO T_VB_BIOTIPO (ID_BIOTIPO, NM_BIOTIPO, DS_BIOTIPO, DT_CADASTRO, NM_USUARIO) VALUES (SQ_VB_BIOTIPO.nextval, ?, ?, SYSDATE, USER)";
         String querySelect = "SELECT * FROM T_VB_BIOTIPO ORDER BY ID_BIOTIPO DESC FETCH FIRST 1 ROW ONLY";
 
         try (Connection connection = DataBaseFactory.getConnection();
@@ -79,12 +79,12 @@ public class BiotipoRepository implements IRepository<Biotipo> {
 
             try(ResultSet rs = statementSelect.executeQuery()){
                 if(rs.next()) {
-                    Biotipo biotipoCriado = new Biotipo(
+                    Biotipo novoBiotipo = new Biotipo(
                             rs.getLong("ID_BIOTIPO"),
-                            rs.getString("NOME_BIOTIPO"),
-                            rs.getString("DESC_BIOTIPO")
+                            rs.getString("NM_BIOTIPO"),
+                            rs.getString("DS_BIOTIPO")
                     );
-                    return Optional.of(biotipoCriado);
+                    return Optional.of(novoBiotipo);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -99,7 +99,7 @@ public class BiotipoRepository implements IRepository<Biotipo> {
 
     @Override
     public void updateReposiory(Biotipo biotipo) throws SQLException {
-        String query = "UPDATE T_VB_BIOTIPO SET NOME_BIOTIPO = ?, DESC_BIOTIPO = ? WHERE ID_BIOTIPO = ?";
+        String query = "UPDATE T_VB_BIOTIPO SET NM_BIOTIPO = ?, DS_BIOTIPO = ? WHERE ID_BIOTIPO = ?";
 
         try (Connection connection = DataBaseFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {

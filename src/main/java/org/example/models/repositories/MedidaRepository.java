@@ -17,7 +17,7 @@ public class MedidaRepository implements IRepository<Medida> {
     @Override
     public List<Medida> findAllRepository() throws SQLException {
         List<Medida> medidas = new ArrayList<>();
-        String query = "SELECT * FROM T_VB_MEDIDA ORDER BY 1 ASC";
+        String query = "SELECT * FROM T_VB_MEDIDAS ORDER BY 1 ASC";
 
         try (Connection connection = DataBaseFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(query);
@@ -30,11 +30,12 @@ public class MedidaRepository implements IRepository<Medida> {
                         rs.getDouble("TORAX_MEDIDA"),
                         rs.getDouble("BRACO_DIREITO_MEDIDA"),
                         rs.getDouble("BRACO_ESQUERDO_MEDIDA"),
-                        rs.getDouble("COXA_DIREITO_MEDIDA"),
-                        rs.getDouble("COXA_ESQUERDO_MEDIDA"),
-                        rs.getDouble("PANTURRILHA_DIREITO_MEDIDA"),
-                        rs.getDouble("PANTURRILHA_ESQUERDO_MEDIDA")
-
+                        rs.getDouble("COXA_DIREITA_MEDIDA"),
+                        rs.getDouble("COXA_ESQUERDA_MEDIDA"),
+                        rs.getDouble("PANTURRILHA_DIREITA_MEDIDA"),
+                        rs.getDouble("PANTURRILHA_ESQUERDA_MEDIDA"),
+                        rs.getDouble("ALTURA_MEDIDA"),
+                        rs.getDouble("PESO_MEDIDA")
                 );
                 medidas.add(medida);
             }
@@ -46,7 +47,7 @@ public class MedidaRepository implements IRepository<Medida> {
 
     @Override
     public Optional<Medida> findByIdRepository(Long id) throws SQLException {
-        String query = "SELECT * FROM T_VB_MEDIDA WHERE ID_MEDIDA = ?";
+        String query = "SELECT * FROM T_VB_MEDIDAS WHERE ID_MEDIDA = ?";
 
         try(Connection connection = DataBaseFactory.getConnection();
             PreparedStatement ps = connection.prepareStatement(query)){
@@ -60,11 +61,12 @@ public class MedidaRepository implements IRepository<Medida> {
                             rs.getDouble("TORAX_MEDIDA"),
                             rs.getDouble("BRACO_DIREITO_MEDIDA"),
                             rs.getDouble("BRACO_ESQUERDO_MEDIDA"),
-                            rs.getDouble("COXA_DIREITO_MEDIDA"),
-                            rs.getDouble("COXA_ESQUERDO_MEDIDA"),
-                            rs.getDouble("PANTURRILHA_DIREITO_MEDIDA"),
-                            rs.getDouble("PANTURRILHA_ESQUERDO_MEDIDA")
-
+                            rs.getDouble("COXA_DIREITA_MEDIDA"),
+                            rs.getDouble("COXA_ESQUERDA_MEDIDA"),
+                            rs.getDouble("PANTURRILHA_DIREITA_MEDIDA"),
+                            rs.getDouble("PANTURRILHA_ESQUERDA_MEDIDA"),
+                            rs.getDouble("ALTURA_MEDIDA"),
+                            rs.getDouble("PESO_MEDIDA")
                     );
                     return Optional.of(medida);
                 }
@@ -79,8 +81,8 @@ public class MedidaRepository implements IRepository<Medida> {
 
     @Override
     public Optional<Medida> insertRepository(Medida medida) throws SQLException {
-        String queryInsert = "INSERT INTO T_VB_MEDIDA (ID_MEDIDA, CINTURA_MEDIDA, TORAX_MEDIDA, BRACO_DIREITO_MEDIDA, BRACO_ESQUERDO_MEDIDA, COXA_DIREITO_MEDIDA, COXA_ESQUERDO_MEDIDA, PANTURRILHA_DIREITO_MEDIDA, PANTURRILHA_ESQUERDO_MEDIDA) VALUES (SQ_VB_BIOTIPO.nextval, ?, ?, ?, ?, ?, ?, ?, ?)";
-        String querySelect = "SELECT * FROM T_VB_MEDIDA ORDER BY ID_MEDIDA DESC FETCH FIRST 1 ROW ONLY";
+        String queryInsert = "INSERT INTO T_VB_MEDIDAS (ID_MEDIDA, CINTURA_MEDIDA, TORAX_MEDIDA, BRACO_DIREITO_MEDIDA, BRACO_ESQUERDO_MEDIDA, COXA_DIREITA_MEDIDA, COXA_ESQUERDA_MEDIDA, PANTURRILHA_DIREITA_MEDIDA, PANTURRILHA_ESQUERDA_MEDIDA, ALTURA_MEDIDA, PESO_MEDIDA, DT_CADASTRO, NM_USUARIO) VALUES (SQ_VB_MEDIDA.nextval, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, SYSDATE, USER)";
+        String querySelect = "SELECT * FROM T_VB_MEDIDAS ORDER BY ID_MEDIDA DESC FETCH FIRST 1 ROW ONLY";
 
         try (Connection connection = DataBaseFactory.getConnection();
              PreparedStatement statementInsert = connection.prepareStatement(queryInsert);
@@ -94,24 +96,27 @@ public class MedidaRepository implements IRepository<Medida> {
             statementInsert.setDouble(6, medida.getCoxaEsquerda());
             statementInsert.setDouble(7, medida.getPanturrilhaDireita());
             statementInsert.setDouble(8, medida.getPanturrilhaEsquerda());
+            statementInsert.setDouble(9, medida.getAltura());
+            statementInsert.setDouble(10, medida.getPeso());
 
             statementInsert.executeUpdate();
 
             try(ResultSet rs = statementSelect.executeQuery()){
                 if(rs.next()) {
-                    Medida medidaCriada = new Medida(
+                    Medida novaMedida = new Medida(
                             rs.getLong("ID_MEDIDA"),
                             rs.getDouble("CINTURA_MEDIDA"),
                             rs.getDouble("TORAX_MEDIDA"),
                             rs.getDouble("BRACO_DIREITO_MEDIDA"),
                             rs.getDouble("BRACO_ESQUERDO_MEDIDA"),
-                            rs.getDouble("COXA_DIREITO_MEDIDA"),
-                            rs.getDouble("COXA_ESQUERDO_MEDIDA"),
-                            rs.getDouble("PANTURRILHA_DIREITO_MEDIDA"),
-                            rs.getDouble("PANTURRILHA_ESQUERDO_MEDIDA")
-
+                            rs.getDouble("COXA_DIREITA_MEDIDA"),
+                            rs.getDouble("COXA_ESQUERDA_MEDIDA"),
+                            rs.getDouble("PANTURRILHA_DIREITA_MEDIDA"),
+                            rs.getDouble("PANTURRILHA_ESQUERDA_MEDIDA"),
+                            rs.getDouble("ALTURA_MEDIDA"),
+                            rs.getDouble("PESO_MEDIDA")
                     );
-                    return Optional.of(medidaCriada);
+                    return Optional.of(novaMedida);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -126,7 +131,7 @@ public class MedidaRepository implements IRepository<Medida> {
 
     @Override
     public void updateReposiory(Medida medida) throws SQLException {
-        String query = "UPDATE T_VB_MEDIDA SET CINTURA_MEDIDA = ?, TORAX_MEDIDA = ?, BRACO_DIREITO_MEDIDA = ?, BRACO_ESQUERDO_MEDIDA = ?, COXA_DIREITO_MEDIDA = ?, COXA_ESQUERDO_MEDIDA = ?, PANTURRILHA_DIREITO_MEDIDA = ?, PANTURRILHA_ESQUERDO_MEDIDA = ? WHERE ID_MEDIDA = ?";
+        String query = "UPDATE T_VB_MEDIDAS SET CINTURA_MEDIDA = ?, TORAX_MEDIDA = ?, BRACO_DIREITO_MEDIDA = ?, BRACO_ESQUERDO_MEDIDA = ?, COXA_DIREITA_MEDIDA = ?, COXA_ESQUERDA_MEDIDA = ?, PANTURRILHA_DIREITA_MEDIDA = ?, PANTURRILHA_ESQUERDA_MEDIDA = ?, ALTURA_MEDIDA = ?, PESO_MEDIDA = ? WHERE ID_MEDIDA = ?";
 
         try (Connection connection = DataBaseFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
@@ -139,7 +144,9 @@ public class MedidaRepository implements IRepository<Medida> {
             ps.setDouble(6, medida.getCoxaEsquerda());
             ps.setDouble(7, medida.getPanturrilhaDireita());
             ps.setDouble(8, medida.getPanturrilhaEsquerda());
-            ps.setDouble(9, medida.getId());
+            ps.setDouble(9, medida.getAltura());
+            ps.setDouble(10, medida.getPeso());
+            ps.setDouble(11, medida.getId());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -149,7 +156,7 @@ public class MedidaRepository implements IRepository<Medida> {
 
     @Override
     public void deleteRepository(Long id) throws SQLException {
-        String query = "DELETE FROM T_VB_MEDIDA WHERE ID_MEDIDA = ?";
+        String query = "DELETE FROM T_VB_MEDIDAS WHERE ID_MEDIDA = ?";
 
         try (Connection connection = DataBaseFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {

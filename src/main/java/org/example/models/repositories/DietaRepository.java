@@ -24,8 +24,8 @@ public class DietaRepository implements IRepository<Dieta> {
             while(rs.next()){
                 Dieta dieta = new Dieta(
                         rs.getLong("ID_DIETA"),
-                        rs.getString("NOME_DIETA"),
-                        rs.getString("DESC_DIETA")
+                        rs.getString("NM_DIETA"),
+                        rs.getString("DS_DIETA")
                 );
                 dietas.add(dieta);
             }
@@ -47,8 +47,8 @@ public class DietaRepository implements IRepository<Dieta> {
                 if(rs.next()) {
                     Dieta dieta = new Dieta(
                             rs.getLong("ID_DIETA"),
-                            rs.getString("NOME_DIETA"),
-                            rs.getString("DESC_DIETA")
+                            rs.getString("NM_DIETA"),
+                            rs.getString("DS_DIETA")
                     );
                     return Optional.of(dieta);
                 }
@@ -63,7 +63,7 @@ public class DietaRepository implements IRepository<Dieta> {
 
     @Override
     public Optional<Dieta> insertRepository(Dieta dieta) throws SQLException {
-        String queryInsert = "INSERT INTO T_VB_DIETA (ID_DIETA, NOME_DIETA, DESC_DIETA) VALUES (SQ_VB_DIETA.nextval, ?, ?)";
+        String queryInsert = "INSERT INTO T_VB_DIETA (ID_DIETA, NM_DIETA, DS_DIETA, DT_CADASTRO, NM_USUARIO) VALUES (SQ_VB_DIETA.nextval, ?, ?, SYSDATE, USER)";
         String querySelect = "SELECT * FROM T_VB_DIETA ORDER BY ID_DIETA DESC FETCH FIRST 1 ROW ONLY";
 
         try (Connection connection = DataBaseFactory.getConnection();
@@ -77,12 +77,12 @@ public class DietaRepository implements IRepository<Dieta> {
 
             try(ResultSet rs = statementSelect.executeQuery()){
                 if(rs.next()) {
-                    Dieta dietaCriada = new Dieta(
+                    Dieta novaDieta = new Dieta(
                             rs.getLong("ID_DIETA"),
-                            rs.getString("NOME_DIETA"),
-                            rs.getString("DESC_DIETA")
+                            rs.getString("NM_DIETA"),
+                            rs.getString("DS_DIETA")
                     );
-                    return Optional.of(dietaCriada);
+                    return Optional.of(novaDieta);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -97,7 +97,7 @@ public class DietaRepository implements IRepository<Dieta> {
 
     @Override
     public void updateReposiory(Dieta dieta) throws SQLException {
-        String query = "UPDATE T_VB_DIETA SET NOME_DIETA = ?, DESC_DIETA = ? WHERE ID_DIETA = ?";
+        String query = "UPDATE T_VB_DIETA SET NM_DIETA = ?, DS_DIETA = ? WHERE ID_DIETA = ?";
 
         try (Connection connection = DataBaseFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {

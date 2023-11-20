@@ -45,9 +45,9 @@ public class BiotipoService implements IService<Biotipo>{
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Requisição inválida! Reveja os dados da sua solicitação.").build();
         } else {
-            Biotipo biotipoCriado = repository.insertRepository(biotipo).orElse(null);
+            Biotipo novoBiotipo = repository.insertRepository(biotipo).orElse(null);
 
-            return Response.status(Response.Status.CREATED).entity(biotipoCriado).build();
+            return Response.status(Response.Status.CREATED).entity(novoBiotipo).build();
         }
     }
 

@@ -28,6 +28,7 @@ public class DietaResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response insert(Dieta dieta) throws SQLException {
         return service.insertService(dieta);
     }

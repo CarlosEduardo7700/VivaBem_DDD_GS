@@ -10,9 +10,11 @@ public class Medida {
     private double coxaEsquerda;
     private double panturrilhaDireita;
     private double panturrilhaEsquerda;
+    private double altura;
+    private double peso;
 
 
-    public Medida(Long id, double cintura, double torax, double bracoDireito, double bracoEsquerdo, double coxaDireita, double coxaEsquerda, double panturrilhaDireita, double panturrilhaEsquerda) {
+    public Medida(Long id, double cintura, double torax, double bracoDireito, double bracoEsquerdo, double coxaDireita, double coxaEsquerda, double panturrilhaDireita, double panturrilhaEsquerda, double altura, double peso) {
         this.id = id;
         this.cintura = cintura;
         this.torax = torax;
@@ -22,6 +24,8 @@ public class Medida {
         this.coxaEsquerda = coxaEsquerda;
         this.panturrilhaDireita = panturrilhaDireita;
         this.panturrilhaEsquerda = panturrilhaEsquerda;
+        this.altura = altura;
+        this.peso = peso;
     }
 
     public Medida() {}
@@ -97,5 +101,21 @@ public class Medida {
 
     public void setPanturrilhaEsquerda(double panturrilhaEsquerda) {
         this.panturrilhaEsquerda = panturrilhaEsquerda;
+    }
+
+    public double getAltura() {
+        return altura;
+    }
+
+    public void setAltura(double altura) {
+        this.altura = altura;
+    }
+
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
     }
 }
