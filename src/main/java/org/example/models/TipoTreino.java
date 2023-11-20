@@ -2,12 +2,14 @@ package org.example.models;
 
 public class TipoTreino {
     private Long id;
+    private Treino treino;
     private String nome;
     private String descricao;
 
 
-    public TipoTreino(Long id, String nome, String descricao) {
+    public TipoTreino(Long id, Treino treino, String nome, String descricao) {
         this.id = id;
+        this.treino = treino;
         this.nome = nome;
         this.descricao = descricao;
     }
@@ -21,6 +23,14 @@ public class TipoTreino {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Treino getTreino() {
+        return treino;
+    }
+
+    public void setTreino(Treino treino) {
+        this.treino = treino;
     }
 
     public String getNome() {

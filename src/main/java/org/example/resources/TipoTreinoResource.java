@@ -28,6 +28,7 @@ public class TipoTreinoResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response insert(TipoTreino tipoTreino) throws SQLException {
         return service.insertService(tipoTreino);
     }

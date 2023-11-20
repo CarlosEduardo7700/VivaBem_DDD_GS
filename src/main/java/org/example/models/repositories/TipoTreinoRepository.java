@@ -13,6 +13,8 @@ import java.util.Optional;
 
 public class TipoTreinoRepository implements IRepository<TipoTreino> {
 
+    private final TreinoRepository treinoRepository = new TreinoRepository();
+
     @Override
     public List<TipoTreino> findAllRepository() throws SQLException {
         List<TipoTreino> tiposTreinos = new ArrayList<>();
@@ -25,8 +27,9 @@ public class TipoTreinoRepository implements IRepository<TipoTreino> {
             while(rs.next()){
                 TipoTreino tipoTreino = new TipoTreino(
                         rs.getLong("ID_TP_TREINO"),
+                        treinoRepository.findByIdRepository(rs.getLong("ID_TREINO")).orElse(null),
                         rs.getString("NM_TP_TREINO"),
-                        rs.getString("DESC_TP_TREINO")
+                        rs.getString("DS_TP_TREINO")
                 );
                 tiposTreinos.add(tipoTreino);
             }
@@ -48,8 +51,9 @@ public class TipoTreinoRepository implements IRepository<TipoTreino> {
                 if(rs.next()) {
                     TipoTreino tipoTreino = new TipoTreino(
                             rs.getLong("ID_TP_TREINO"),
+                            treinoRepository.findByIdRepository(rs.getLong("ID_TREINO")).orElse(null),
                             rs.getString("NM_TP_TREINO"),
-                            rs.getString("DESC_TP_TREINO")
+                            rs.getString("DS_TP_TREINO")
                     );
                     return Optional.of(tipoTreino);
                 }
@@ -64,26 +68,28 @@ public class TipoTreinoRepository implements IRepository<TipoTreino> {
 
     @Override
     public Optional<TipoTreino> insertRepository(TipoTreino tipoTreino) throws SQLException {
-        String queryInsert = "INSERT INTO T_VB_TP_TREINO (ID_TP_TREINO, NM_TP_TREINO, DESC_TP_TREINO) VALUES (SQ_VB_TP_TREINO.nextval, ?, ?)";
+        String queryInsert = "INSERT INTO T_VB_TP_TREINO (ID_TP_TREINO, ID_TREINO, NM_TP_TREINO, DS_TP_TREINO, DT_CADASTRO, NM_USUARIO) VALUES (SQ_VB_TP_TREINO.nextval, ?, ?, ?, SYSDATE, USER)";
         String querySelect = "SELECT * FROM T_VB_TP_TREINO ORDER BY ID_TP_TREINO DESC FETCH FIRST 1 ROW ONLY";
 
         try (Connection connection = DataBaseFactory.getConnection();
              PreparedStatement statementInsert = connection.prepareStatement(queryInsert);
              PreparedStatement statementSelect = connection.prepareStatement(querySelect)) {
 
-            statementInsert.setString(1, tipoTreino.getNome());
-            statementInsert.setString(2, tipoTreino.getDescricao());
+            statementInsert.setLong(1, tipoTreino.getTreino().getId());
+            statementInsert.setString(2, tipoTreino.getNome());
+            statementInsert.setString(3, tipoTreino.getDescricao());
 
             statementInsert.executeUpdate();
 
             try(ResultSet rs = statementSelect.executeQuery()){
                 if(rs.next()) {
-                    TipoTreino tipoTreinoCriado = new TipoTreino(
+                    TipoTreino novoTipoTreino = new TipoTreino(
                             rs.getLong("ID_TP_TREINO"),
+                            treinoRepository.findByIdRepository(rs.getLong("ID_TREINO")).orElse(null),
                             rs.getString("NM_TP_TREINO"),
-                            rs.getString("DESC_TP_TREINO")
+                            rs.getString("DS_TP_TREINO")
                     );
-                    return Optional.of(tipoTreinoCriado);
+                    return Optional.of(novoTipoTreino);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -98,14 +104,15 @@ public class TipoTreinoRepository implements IRepository<TipoTreino> {
 
     @Override
     public void updateReposiory(TipoTreino tipoTreino) throws SQLException {
-        String query = "UPDATE T_VB_TP_TREINO SET NM_TP_TREINO = ?, DESC_TP_TREINO = ? WHERE ID_TP_TREINO = ?";
+        String query = "UPDATE T_VB_TP_TREINO SET ID_TREINO = ?, NM_TP_TREINO = ?, DS_TP_TREINO = ? WHERE ID_TP_TREINO = ?";
 
         try (Connection connection = DataBaseFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
 
-            ps.setString(1, tipoTreino.getNome());
-            ps.setString(2, tipoTreino.getDescricao());
-            ps.setLong(3, tipoTreino.getId());
+            ps.setLong(1, tipoTreino.getTreino().getId());
+            ps.setString(2, tipoTreino.getNome());
+            ps.setString(3, tipoTreino.getDescricao());
+            ps.setLong(4, tipoTreino.getId());
 
             ps.executeUpdate();
         } catch (SQLException e) {

@@ -42,9 +42,9 @@ public class TreinoService implements IService<Treino> {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Requisição inválida! Reveja os dados da sua solicitação.").build();
         } else {
-            Treino treinoCriado = repository.insertRepository(treino).orElse(null);
+            Treino novoTreino = repository.insertRepository(treino).orElse(null);
 
-            return Response.status(Response.Status.CREATED).entity(treinoCriado).build();
+            return Response.status(Response.Status.CREATED).entity(novoTreino).build();
         }
     }
 
