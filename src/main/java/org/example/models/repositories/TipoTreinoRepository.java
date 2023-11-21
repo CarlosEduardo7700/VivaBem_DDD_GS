@@ -68,7 +68,7 @@ public class TipoTreinoRepository implements IRepository<TipoTreino> {
 
     @Override
     public Optional<TipoTreino> insertRepository(TipoTreino tipoTreino) throws SQLException {
-        String queryInsert = "INSERT INTO T_VB_TP_TREINO (ID_TP_TREINO, ID_TREINO, NM_TP_TREINO, DS_TP_TREINO, DT_CADASTRO, NM_USUARIO) VALUES (SQ_VB_TP_TREINO.nextval, ?, ?, ?, SYSDATE, USER)";
+        String queryInsert = "INSERT INTO T_VB_TP_TREINO (ID_TP_TREINO, ID_TREINO, NM_TP_TREINO, DS_TP_TREINO, DT_CADASTRO, NM_USUARIO) VALUES (SQ_VB_TIPO_TREINO.nextval, ?, ?, ?, SYSDATE, USER)";
         String querySelect = "SELECT * FROM T_VB_TP_TREINO ORDER BY ID_TP_TREINO DESC FETCH FIRST 1 ROW ONLY";
 
         try (Connection connection = DataBaseFactory.getConnection();

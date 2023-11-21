@@ -17,6 +17,8 @@ public class Exercicio {
         this.tempoDescanso = tempoDescanso;
     }
 
+    public Exercicio() {}
+
     public Long getId() {
         return id;
     }

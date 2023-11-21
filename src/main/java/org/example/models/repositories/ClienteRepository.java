@@ -182,7 +182,7 @@ public class ClienteRepository implements  IRepository<Cliente>{
 
     @Override
     public void updateReposiory(Cliente cliente) throws SQLException {
-        String query = "UPDATE T_VB_CLIENTE SET ID_MEDIDA = ?, ID_OBJETIVO = ?, ID_BIOTIPO = ?, ID_DIETA = ?, ID_TREINO = ?, EMAIL_CLIENTE = ?, SENHA_CLIENTE = ?, NM_CLIENTE = ?, GENERO_CLIENTE = ?, IDADE_CLIENTE = ?, METABOLISMO_CLIENTE = ? WHERE ID_USUARIO = ?";
+        String query = "UPDATE T_VB_CLIENTE SET ID_MEDIDA = ?, ID_OBJETIVO = ?, ID_BIOTIPO = ?, ID_DIETA = ?, ID_TREINO = ?, EMAIL_CLIENTE = ?, SENHA_CLIENTE = ?, NM_CLIENTE = ?, GENERO_CLIENTE = ?, IDADE_CLIENTE = ?, METABOLISMO_CLIENTE = ? WHERE ID_CLIENTE = ?";
 
         try (Connection connection = DataBaseFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {

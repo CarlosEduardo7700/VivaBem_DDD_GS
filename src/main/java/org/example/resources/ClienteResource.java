@@ -8,7 +8,7 @@ import org.example.services.ClienteService;
 
 import java.sql.SQLException;
 
-@Path("/usuario")
+@Path("/cliente")
 public class ClienteResource {
 
     private final ClienteService service = new ClienteService();
