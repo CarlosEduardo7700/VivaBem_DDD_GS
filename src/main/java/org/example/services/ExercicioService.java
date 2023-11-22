@@ -2,6 +2,7 @@ package org.example.services;
 
 import jakarta.ws.rs.core.Response;
 import org.example.models.Exercicio;
+import org.example.models.TipoTreino;
 import org.example.models.Treino;
 import org.example.models.repositories.ExercicioRepository;
 
@@ -35,6 +36,17 @@ public class ExercicioService implements IService<Exercicio>{
         }
 
         return Response.status(Response.Status.OK).entity(exercicio).build();
+    }
+
+    public Response findByTipoTreinoService(Long idTipoTreino) throws SQLException {
+        List<Exercicio> exercicios = repository.findByTipoTreinoRepository(idTipoTreino);
+
+        if (exercicios.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Nenhum exercício foi encontrado no banco de dados!").build();
+        }
+
+        return Response.status(Response.Status.OK).entity(exercicios).build();
     }
 
     @Override

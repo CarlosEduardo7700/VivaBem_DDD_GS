@@ -2,6 +2,7 @@ package org.example.models.repositories;
 
 import org.example.infrastructure.database.DataBaseFactory;
 import org.example.models.Exercicio;
+import org.example.models.TipoTreino;
 import org.example.models.Treino;
 
 import java.sql.Connection;
@@ -70,6 +71,33 @@ public class ExercicioRepository implements IRepository<Exercicio>{
         }
         return Optional.empty();
     }
+
+
+    public List<Exercicio> findByTipoTreinoRepository(Long idTipoTreino) throws SQLException {
+        List<Exercicio> exercicios = new ArrayList<>();
+        String query = String.format("SELECT * FROM T_VB_EXERC WHERE ID_TP_TREINO = %s", idTipoTreino);
+
+        try (Connection connection = DataBaseFactory.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while(rs.next()){
+                Exercicio exercicio = new Exercicio(
+                        rs.getLong("ID_EXERCICIO"),
+                        tipoTreinoRepository.findByIdRepository(rs.getLong("ID_TP_TREINO")).orElse(null),
+                        rs.getString("NM_EXERCICIO"),
+                        rs.getInt("SERIES_EXERCICIO"),
+                        rs.getInt("REPETICOES_EXERCICIO"),
+                        rs.getInt("TEMPO_DESCANSO_EXERCICIO")
+                );
+                exercicios.add(exercicio);
+            }
+            return exercicios;
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
 
     @Override
     public Optional<Exercicio> insertRepository(Exercicio exercicio) throws SQLException {
