@@ -66,6 +66,31 @@ public class TipoTreinoRepository implements IRepository<TipoTreino> {
         return Optional.empty();
     }
 
+
+    public List<TipoTreino> findByTreinoRepository(Long idTreino) throws SQLException {
+        List<TipoTreino> tiposTreinos = new ArrayList<>();
+        String query = String.format("SELECT * FROM T_VB_TP_TREINO WHERE ID_TREINO = %s", idTreino);
+
+        try (Connection connection = DataBaseFactory.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while(rs.next()){
+                TipoTreino tipoTreino = new TipoTreino(
+                        rs.getLong("ID_TP_TREINO"),
+                        treinoRepository.findByIdRepository(rs.getLong("ID_TREINO")).orElse(null),
+                        rs.getString("NM_TP_TREINO"),
+                        rs.getString("DS_TP_TREINO")
+                );
+                tiposTreinos.add(tipoTreino);
+            }
+            return tiposTreinos;
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+
     @Override
     public Optional<TipoTreino> insertRepository(TipoTreino tipoTreino) throws SQLException {
         String queryInsert = "INSERT INTO T_VB_TP_TREINO (ID_TP_TREINO, ID_TREINO, NM_TP_TREINO, DS_TP_TREINO, DT_CADASTRO, NM_USUARIO) VALUES (SQ_VB_TIPO_TREINO.nextval, ?, ?, ?, SYSDATE, USER)";

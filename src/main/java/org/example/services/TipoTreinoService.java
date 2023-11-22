@@ -36,6 +36,17 @@ public class TipoTreinoService implements IService<TipoTreino>{
         return Response.status(Response.Status.OK).entity(tipoTreino).build();
     }
 
+    public Response findByTreinoService(Long idTreino) throws SQLException {
+        List<TipoTreino> tiposTreinos = repository.findByTreinoRepository(idTreino);
+
+        if (tiposTreinos.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Nenhum tipo de treino foi encontrado no banco de dados!").build();
+        }
+
+        return Response.status(Response.Status.OK).entity(tiposTreinos).build();
+    }
+
     @Override
     public Response insertService(TipoTreino tipoTreino) throws SQLException {
         if (tipoTreino == null) {

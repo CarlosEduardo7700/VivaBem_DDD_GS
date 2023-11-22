@@ -26,6 +26,13 @@ public class TipoTreinoResource {
         return service.findByIdService(id);
     }
 
+    @GET
+    @Path("/treino/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findByTreino(@PathParam("id") Long idTreino) throws SQLException {
+        return service.findByTreinoService(idTreino);
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
